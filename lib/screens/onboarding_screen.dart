@@ -1,6 +1,8 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 
+import 'feedback_screen.dart';
+
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
   static const String id = 'onboard-screen';
@@ -36,6 +38,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                               fontSize: 45
                           ),
                         ),
+
                         const Text(
                           'SHOP|VISTA',
                           textAlign: TextAlign.center,
@@ -120,7 +123,20 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             alignment: Alignment.bottomCenter,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
+                  children: [// create button
+                      TextButton(child: const Text('feedback form',
+                        style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.black
+                        ),), onPressed: () {
+                        // Navigate to the FeedbackScreen when the button is clicked
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FeedbackScreen(),
+                          ),
+                        );
+                      },),
                       DotsIndicator(
                         dotsCount: 5,
                         position: scrollerPosition.round(),
