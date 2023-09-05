@@ -156,7 +156,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         padding: const EdgeInsets.only(left: 20,right: 20),
                         child: ElevatedButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent)
+                            backgroundColor: MaterialStateProperty.all(Colors.deepOrange)
                           ),
                           child: const Text('Start Shopping'),
                           onPressed: (){
