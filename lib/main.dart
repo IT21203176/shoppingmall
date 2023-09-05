@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shoppingmall/screens/home_screen.dart';
+import 'package:shoppingmall/screens/login_screen.dart';
 import 'package:shoppingmall/screens/onboarding_screen.dart';
 
 void main() {
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         SplashScreen.id:(context)=> const SplashScreen(),
         OnBoardingScreen.id: (context)=> const OnBoardingScreen(),
         HomeScreen.id: (context)=> const HomeScreen(),
+        LoginScreen.id: (context)=> const LoginScreen(),
       },
     );
   }

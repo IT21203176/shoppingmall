@@ -2,10 +2,14 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shoppingmall/screens/home_screen.dart';
+import 'package:shoppingmall/screens/login_screen.dart';
 
 import 'feedback_screen.dart';
 
 class OnBoardingScreen extends StatefulWidget {
+
+
+
   const OnBoardingScreen({super.key});
   static const String id = 'onboard-screen';
 
@@ -161,6 +165,19 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           child: const Text('Start Shopping'),
                           onPressed: (){
                             Navigator.pushReplacementNamed(context, HomeScreen.id);
+                          },
+                        ),
+                      ) :
+
+                      scrollerPosition == 1? Padding(
+                        padding: const EdgeInsets.only(left: 20,right: 20),
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(Colors.deepOrange)
+                          ),
+                          child: const Text('Already have an Account? Sign-In', style: TextStyle(color: Colors.black),),
+                          onPressed: (){
+                            Navigator.pushReplacementNamed(context, LoginScreen.id);
                           },
                         ),
                       ) :
