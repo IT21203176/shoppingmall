@@ -1,5 +1,7 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:shoppingmall/screens/home_screen.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
@@ -13,6 +15,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   double scrollerPosition = 0;
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations(
+      [
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown
+      ]
+    );
     return Scaffold(
       body: Stack(
         children: [
@@ -128,11 +136,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           activeColor: Colors.deepPurple,
                         ),
                       ),
-                      scrollerPosition == 3? Padding(
+                      scrollerPosition == 2? Padding(
                         padding: const EdgeInsets.only(left: 20,right: 20),
                         child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent)
+                          ),
                           child: const Text('Start Shopping'),
-                          onPressed: (){},
+                          onPressed: (){
+                            Navigator.pushReplacementNamed(context, HomeScreen.id);
+                          },
                         ),
                       ) :
                       TextButton(
@@ -141,7 +154,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           fontSize: 22,
                           color: Colors.black
                         ),),
-                        onPressed: (){},
+                        onPressed: (){
+                          Navigator.pushReplacementNamed(context, HomeScreen.id);
+                        },
                       ),
                     const SizedBox(height: 60,)
                   ],
