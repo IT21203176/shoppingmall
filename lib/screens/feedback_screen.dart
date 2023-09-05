@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/feedback_widget.dart';
+
 
 
 class FeedbackScreen extends StatelessWidget {
@@ -9,7 +11,7 @@ class FeedbackScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        //body: FeedbackFormApp(),
+        body: FeedbackFormApp(),
       ),
     );
   }
