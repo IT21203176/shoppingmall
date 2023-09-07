@@ -1,233 +1,73 @@
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:shoppingmall/screens/home_screen.dart';
-import 'package:shoppingmall/screens/login_screen.dart';
+import 'package:dots_indicator/dots_indicator.dart';
+import 'package:shoppingmall/constants.dart';
 
-import 'feedback_screen.dart';
-
-class OnBoardingScreen extends StatefulWidget {
-
-
-
-  const OnBoardingScreen({super.key});
-  static const String id = 'onboard-screen';
-
+class OnBoardScreen extends StatefulWidget {
   @override
-  State<OnBoardingScreen> createState() => _OnBoardingScreenState();
+  _OnBoardScreenState createState() => _OnBoardScreenState();
 }
 
-class _OnBoardingScreenState extends State<OnBoardingScreen> {
-  double scrollerPosition = 0;
+final _controller = PageController(
+  initialPage: 0,
+);
+
+double _currentPage = 0;
+
+List<Widget> _pages = [
+  Column(
+    children: [
+      Expanded(child: Image.asset('assets/images/discount.png')),
+      Text('Shop Smart, Shop Easy', style: kPageViewTextStyle,textAlign:TextAlign.center,),
+    ],
+  ),
+
+  Column(
+    children: [
+      Expanded(child: Image.asset('assets/images/Wishlist.jpg')),
+      Text('Your Wishlist, Your Way!', style: kPageViewTextStyle,textAlign:TextAlign.center,),
+    ],
+  ),
+
+  Column(
+    children: [
+      Expanded(child: Image.asset('assets/images/find1.jpg')),
+      Text('Where Your Dreams Become Products!', style: kPageViewTextStyle,textAlign:TextAlign.center,),
+    ],
+  ),
+];
+
+class _OnBoardScreenState extends State<OnBoardScreen> {
+  //const OnBoardScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations(
-      [
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown
-      ]
-    );
-    return Scaffold(
-      body: Stack(
-        children: [
-              PageView(
-                onPageChanged: (val){
-                  setState(() {
-                    scrollerPosition = val.toDouble();
-                  });
-                },
-                children: [
-                  OnBoardPage(
-                    boardColumn: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          'Welcome  to \n',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 45
-                          ),
-                        ),
-
-                        const Text(
-                          'SHOP|VISTA',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF261B65),
-                              fontSize: 35
-                          ),
-                        ),
-                        SizedBox(
-                            height: 400,
-                            width: 400,
-                            child: Image.asset('assets/images/choose.jpg'))
-                      ],
-                    ),
-                  ),
-                  OnBoardPage(
-                    boardColumn: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          'Unlock Your\n',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                              fontSize: 30
-                          ),
-                        ),
-                        const Text(
-                          'Shopping World \n',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                              fontSize: 30
-                          ),
-                        ),
-                        SizedBox(
-                            height: 250,
-                            width: 250,
-                            child: Image.asset('assets/images/login.jpeg')),
-
-                      ],
-                    ),
-                  ),
-                  OnBoardPage(
-                    boardColumn: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          'Plan Your \n',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                              fontSize: 30
-                          ),
-                        ),
-                        const Text(
-                          'Shopping Easily With Us.. \n',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                              fontSize: 30
-                          ),
-                        ),
-                        SizedBox(
-                            height: 300,
-                            width: 300,
-                            child: Image.asset('assets/images/Wishlist.jpg')),
-
-                      ],
-                    ),
-                  ),
-
-                ],
-              ),
-
-          Align(
-            alignment: Alignment.bottomCenter,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [// create button
-                      TextButton(child: const Text('feedback form',
-                        style: TextStyle(
-                            fontSize: 22,
-                            color: Colors.black
-                        ),), onPressed: () {
-                        // Navigate to the FeedbackScreen when the button is clicked
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FeedbackScreen(),
-                          ),
-                        );
-                      },),
-                      DotsIndicator(
-                        dotsCount: 5,
-                        position: scrollerPosition.round(),
-                        decorator: const DotsDecorator(
-                          activeColor: Colors.deepPurple,
-                        ),
-                      ),
-                      scrollerPosition == 2? Padding(
-                        padding: const EdgeInsets.only(left: 20,right: 20),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Colors.deepOrange)
-                          ),
-                          child: const Text('Start Shopping'),
-                          onPressed: (){
-                            Navigator.pushReplacementNamed(context, HomeScreen.id);
-                          },
-                        ),
-                      ) :
-
-                      scrollerPosition == 1? Padding(
-                        padding: const EdgeInsets.only(left: 20,right: 20),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(Colors.deepOrange)
-                          ),
-                          child: const Text('Already have an Account? Sign-In', style: TextStyle(color: Colors.black),),
-                          onPressed: (){
-                            Navigator.pushReplacementNamed(context, LoginScreen.id);
-                          },
-                        ),
-                      ) :
-                      TextButton(
-                        child: const Text('SKIP TO THE APP>',
-                        style: TextStyle(
-                          fontSize: 22,
-                          color: Colors.black
-                        ),),
-                        onPressed: (){
-                          Navigator.pushReplacementNamed(context, HomeScreen.id);
-                        },
-                      ),
-                    const SizedBox(height: 60,)
-                  ],
-                ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class OnBoardPage extends StatelessWidget {
-  final Column? boardColumn;
-  const OnBoardPage({super.key, this.boardColumn});
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
+    return Column(
       children: [
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 155,
-            decoration: const BoxDecoration(
-                color: Color(0xFFFEB062),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(50), topRight: Radius.circular(50)
-              ),
-            ),
+        Expanded(
+          child: PageView(
+            controller: _controller,
+            children: _pages,
+            onPageChanged: (index){
+              setState(() {
+                _currentPage = index.toDouble();
+              });
+            },
           ),
         ),
-        Container(
-          child: Center(child: boardColumn),
+        SizedBox(height: 20,),
+        DotsIndicator(
+          dotsCount: _pages.length,
+          position: _currentPage.round(),
+          decorator: DotsDecorator(
+              size: const Size.square(9.0),
+              activeSize: const Size(18.0, 9.0),
+              activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+              activeColor: Colors.deepPurple
+          ),
         ),
-
+        SizedBox(height: 40,),
       ],
-    );
+    ) ;
   }
 }
+
 

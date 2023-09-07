@@ -1,66 +1,88 @@
 import 'dart:async';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:shoppingmall/providers/auth_provider.dart';
 import 'package:shoppingmall/screens/home_screen.dart';
 import 'package:shoppingmall/screens/login_screen.dart';
 import 'package:shoppingmall/screens/onboarding_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:shoppingmall/screens/welcome_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_)=>AuthProvider(),
+        ),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  //const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // Remove the banner
-      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        //useMaterial3: true,
+        primaryColor: Colors.deepPurple
       ),
-      initialRoute: SplashScreen.id,
-      routes: {
-        SplashScreen.id:(context)=> const SplashScreen(),
-        OnBoardingScreen.id: (context)=> const OnBoardingScreen(),
-        HomeScreen.id: (context)=> const HomeScreen(),
-        LoginScreen.id: (context)=> const LoginScreen(),
-      },
+      home: SplashScreen(),
     );
   }
 }
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-  static const String id = 'splash-screen';
-
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  //const SplashScreen({super.key});
 
   @override
   void initState() {
-    Timer(const Duration(
-      seconds: 4
-    ), ()=>Navigator.pushReplacementNamed(context, OnBoardingScreen.id),);
+    Timer(
+      Duration(
+        seconds: 3), ()
+    {
+      FirebaseAuth.instance.authStateChanges().listen((User? user) {
+          if(user==null){
+            Navigator.pushReplacement(context, MaterialPageRoute(
+              builder:(context)=>WelcomeScreen(),
+            ));
+          }else{
+            Navigator.pushReplacement(context, MaterialPageRoute(
+              builder:(context)=>HomeScreen(),
+            ));
+          }
+        } );
+    }
+    );
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,overlays: []);
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Center(
-        child: Image.asset('assets/images/LOGO11.png'),
+        child: Hero(
+            tag: 'logo',
+
+            child: Image.asset('assets/images/LOGO11.png')),
       ),
     );
   }
 }
+
+
 
