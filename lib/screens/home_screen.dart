@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             ImageSlider(),
-            ElevatedButton(
+            /*ElevatedButton(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Color(0xFF130336)),
               ),
@@ -46,8 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 });
               },
               child: Text('Sign Out'),
-            ),
-            ElevatedButton(
+            ),*/
+            /*ElevatedButton(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Color(0xFF130336)),
               ),
@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.pushNamed(context, WelcomeScreen.id);
               },
               child: Text('Home Screen'),
-            ),
+            ),*/
           ],
         )
       ),
