@@ -1,7 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shoppingmall/screens/welcome_screen.dart';
 
 import '../providers/location_provider.dart';
 
@@ -36,24 +34,10 @@ class _MyAppBarState extends State<MyAppBar> {
       actions: [
         Padding(
           padding: const EdgeInsets.all(2.0),
-          child: Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.power_settings_new),
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                  Navigator.pushReplacementNamed(context, WelcomeScreen.id);
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.account_circle_outlined),
-                onPressed: () {
-                },
-              ),
-            ],
+          child: IconButton(
+            icon: Icon(Icons.account_circle_outlined,), onPressed: () {  },
           ),
         ),
-
       ],
       centerTitle: true,
       bottom: PreferredSize(
