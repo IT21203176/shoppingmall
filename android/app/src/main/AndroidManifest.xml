@@ -1,5 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.shoppingmall">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:label="shoppingmall"
         android:name="${applicationName}"
@@ -17,9 +21,8 @@
                  while the Flutter UI initializes. After that, this theme continues
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
-                android:name="com.google.android.geo.API_KEY"
+                android:name="io.flutter.embedding.android.NormalTheme"
                 android:resource="@style/NormalTheme"
-                android:value="AIzaSyAJa2vrXO0o2yM1I3n_SzqmWuJbweUSqsY"
                 />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -31,12 +34,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-
-        <!-- Add the receiver with android:exported="true" here -->
-        <receiver
-            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
-            android:exported="true">
-            <!-- Add any other necessary attributes or intent filters here -->
-        </receiver>
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="YOUR KEY HERE"/>
     </application>
 </manifest>

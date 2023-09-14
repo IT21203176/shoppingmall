@@ -5,7 +5,8 @@ import 'package:shoppingmall/providers/auth_provider.dart';
 import 'package:shoppingmall/providers/location_provider.dart';
 import 'package:shoppingmall/screens/signin_screen.dart';
 import 'package:shoppingmall/screens/welcome_screen.dart';
-import 'package:shoppingmall/widgets/images_slider.dart';
+import 'package:shoppingmall/widgets/image_slider.dart';
+import 'package:shoppingmall/widgets/image_slider.dart';
 import 'package:shoppingmall/widgets/my_appbar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,35 +30,35 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
 
       body: Center(
-        child: Column(
-          children: [
-            ImageSlider(),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xFF130336)),
-              ),
-              onPressed: () {
-                auth.error='';
+          child: Column(
+            children: [
+              ImageSlider(),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Color(0xFF130336)),
+                ),
+                onPressed: () {
+                  auth.error='';
 
-                FirebaseAuth.instance.signOut().then((value) {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context)=>SignInScreen(),
-                  ));
-                });
-              },
-              child: Text('Sign Out'),
-            ),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xFF130336)),
+                  FirebaseAuth.instance.signOut().then((value) {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context)=>SignInScreen(),
+                    ));
+                  });
+                },
+                child: Text('Sign Out'),
               ),
-              onPressed: () {
-                Navigator.pushNamed(context, WelcomeScreen.id);
-              },
-              child: Text('Home Screen'),
-            ),
-          ],
-        )
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Color(0xFF130336)),
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, WelcomeScreen.id);
+                },
+                child: Text('Home Screen'),
+              ),
+            ],
+          )
       ),
     );
   }
