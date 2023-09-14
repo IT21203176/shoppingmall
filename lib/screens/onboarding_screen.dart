@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:shoppingmall/constants.dart';
@@ -34,6 +35,7 @@ List<Widget> _pages = [
       Text('Where Your Dreams Become Products!', style: kPageViewTextStyle,textAlign:TextAlign.center,),
     ],
   ),
+
 ];
 
 class _OnBoardScreenState extends State<OnBoardScreen> {
@@ -64,7 +66,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
               activeColor: Colors.deepPurple
           ),
         ),
-        SizedBox(height: 40,),
+        SizedBox(height: 10,),
       ],
     ) ;
   }

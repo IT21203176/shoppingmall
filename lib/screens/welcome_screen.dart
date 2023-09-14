@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppingmall/providers/auth_provider.dart';
+import 'package:shoppingmall/providers/location_provider.dart';
+import 'package:shoppingmall/screens/auth_screen.dart';
+import 'package:shoppingmall/screens/map_screen.dart';
 import 'package:shoppingmall/screens/onboarding_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'feedback_screen.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   //const WelcomeScreen({super.key});
+  static const String id = 'welcome-screen';
 
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
 
@@ -71,17 +81,23 @@ class WelcomeScreen extends StatelessWidget {
                           child: AbsorbPointer(
                             absorbing: _validPhoneNumber ? false:true,
                             child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(Colors.deepPurple),
-                              ),
                               onPressed: (){
+                                myState((){
+                                  auth.loading = true;
+                                });
                                 String number = '+91${_phoneNumberController
                                     .text}';
                                 auth.verifyPhone(context, number).then((value){
                                   _phoneNumberController.clear();
+                                    //auth.loading=false;
                                 });
                               },
-                              child: Text(_validPhoneNumber ? 'CONTINUE' : 'ENTER PHONE NUMBER', style: TextStyle(color: Colors.white,),),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(Colors.deepPurple),
+                              ),
+                              child: auth.loading? CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              ): Text(_validPhoneNumber ? 'CONTINUE' : 'ENTER PHONE NUMBER', style: TextStyle(color: Colors.white,),),
                             ),
                           ),
                         ),],
@@ -95,6 +111,7 @@ class WelcomeScreen extends StatelessWidget {
       );
     }
 
+    final locationData = Provider.of<LocationProvider>(context, listen: false);
 
     return Scaffold(
       body: Padding(
@@ -114,10 +131,51 @@ class WelcomeScreen extends StatelessWidget {
                   },
                 ),
             ),
+
             Column(
               children: [
                 Expanded(child: OnBoardScreen(),),
-                Text('Ready to Shopping?'),
+
+                TextButton(
+                  child: Text('Vendor', style: TextStyle(color: Color(0xFF0E0434)),),
+                  onPressed: (){
+                    Navigator.pushNamed(context, AuthScreen.id);
+                  },
+                ),
+                TextButton(
+
+                  child: Text('Shop Finder', style: TextStyle(color: Color(
+                      0xFF36353D), fontSize: 15)),
+                  onPressed: () async {
+                    setState(() {
+                      locationData.loading=true;
+                    });
+
+                    final locationStatus = await Permission.location.status;
+                    if (locationStatus.isGranted) {
+                      await locationData.getCurrentPosition();
+                      if (locationData.permissionAllowed == true) {
+                        Navigator.pushReplacementNamed(context, MapScreen.id);
+                      } else {
+                        print('Permission Not Allowed');
+                      }
+                    } else {
+                      // Request location permission
+                      final status = await Permission.location.request();
+                      if (status.isGranted) {
+                        await locationData.getCurrentPosition();
+                        if (locationData.permissionAllowed == true) {
+                          Navigator.pushReplacementNamed(context, MapScreen.id);
+                        } else {
+                          print('Permission Not Allowed');
+                        }
+                      } else {
+                        print('Location permission denied');
+                      }
+                    }
+                  },
+                ),
+
                 ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Color(0xFFB598E3)),

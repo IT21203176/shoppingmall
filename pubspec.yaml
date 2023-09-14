@@ -18,6 +18,15 @@ dependencies:
   cloud_firestore: ^4.9.1
   firebase_core: ^2.15.1
   provider: ^6.0.5
+  geolocator: ^10.0.1
+  permission_handler: ^10.4.5
+  geocoder_buddy: ^1.0.1
+  shared_preferences: ^2.2.1
+  carousel_slider: ^4.2.1
+  image_picker: ^1.0.4
+  email_validator: ^2.1.17
+  location: ^5.0.0
+  firebase_storage: ^11.2.6
 
 dev_dependencies:
   flutter_test:
@@ -38,7 +47,7 @@ flutter:
 
   # fonts:
   #   - family: Schyler
-  #     fonts:
+  #    fonts:
   #       - asset: fonts/Schyler-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
