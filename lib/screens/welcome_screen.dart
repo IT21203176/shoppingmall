@@ -3,9 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:shoppingmall/providers/auth_provider.dart';
 import 'package:shoppingmall/providers/location_provider.dart';
 import 'package:shoppingmall/screens/auth_screen.dart';
+import 'package:shoppingmall/screens/feedback_screen.dart';
 import 'package:shoppingmall/screens/map_screen.dart';
 import 'package:shoppingmall/screens/onboarding_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shoppingmall/widgets/feedback_widget.dart';
+
 
 import 'chat_bot_app.dart';
 
@@ -180,16 +183,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Color(0xFFB598E3)),
                   ),
-                  child: Text('Give Your Feedback...', style: TextStyle(color: Colors.black),),
-                  onPressed: (){
-                    /*Navigator.push(
+                  child: Text(
+                    'Give Your Feedback...',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onPressed: () {
+                    // Navigate to the FeedbackScreen when the button is pressed
+                    Navigator.push(
                       context,
-                     /* MaterialPageRoute(
-                        //builder: (context) => FeedbackScreen(),
-                      ),*/
-                    );*/
+                      MaterialPageRoute(
+                        builder: (context) => FeedbackFormApp()
+                      ),
+                    );
                   },
                 ),
+
                 SizedBox(height: 20,),
 
                 ElevatedButton(

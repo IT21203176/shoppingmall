@@ -1,177 +1,174 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(ChatbotApp());
-}
+void main() => runApp(MyApp());
 
-class ChatbotApp extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        primaryColor: Colors.blue,
-        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.blueAccent),
-      ),
       home: ChatScreen(),
+      theme: ThemeData(
+        primaryColor: Colors.blue, // Set your primary color here
+        hintColor: Colors.green, // Set your accent color here
+      ),
     );
   }
 }
 
 class ChatScreen extends StatefulWidget {
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  State createState() => ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
-  final List<Message> _messages = [];
-  final TextEditingController _textController = TextEditingController();
+class ChatScreenState extends State<ChatScreen> {
+  final List<String> messages = [];
+  String currentCategory = "";
+  TextEditingController _controller = TextEditingController();
 
-  void _handleSubmitted(String text) {
-    _textController.clear();
+  // Function to handle user input and chatbot responses
+  void handleUserInput(String text) {
     setState(() {
-      _messages.add(Message(text: text, isUser: true));
+      messages.add('User: $text');
+
+      if (currentCategory.isEmpty) {
+        // User hasn't selected a category yet, provide category options as buttons.
+        if (text.toLowerCase().contains('technical support')) {
+          currentCategory = 'Technical Support';
+          messages.add('App: You selected Technical Support.');
+          messages.add('App: Choose from the following options:');
+          messages.add('1. Help with an order');
+          messages.add('2. Account issues');
+        } else if (text.toLowerCase().contains('other support')) {
+          currentCategory = 'Other Support';
+          messages.add('App: You selected Other Support.');
+          messages.add('App: Choose from the following options:');
+          messages.add('1. General inquiries');
+          messages.add('2. Feedback');
+        } else {
+          messages.add('App: I didn\'t understand. Please select "Technical Support" or "Other Support".');
+        }
+      } else {
+        // User has selected a category, handle options within that category.
+        if (currentCategory == 'Technical Support') {
+          if (text == '1') {
+            messages.add('User: 1');
+            messages.add('App: You selected "Help with an order".');
+            messages.add('App: How can I assist you with your order?');
+          } else if (text == '2') {
+            messages.add('User: 2');
+            messages.add('App: You selected "Account issues".');
+            messages.add('App: What account issues are you facing?');
+          } else {
+            messages.add('App: I didn\'t understand that option. Please select a valid option.');
+          }
+        } else if (currentCategory == 'Other Support') {
+          if (text == '1') {
+            messages.add('User: 1');
+            messages.add('App: You selected "General inquiries".');
+            messages.add('App: Ask any general questions you have.');
+          } else if (text == '2') {
+            messages.add('User: 2');
+            messages.add('App: You selected "Feedback".');
+            messages.add('App: Please provide your feedback.');
+          } else {
+            messages.add('App: I didn\'t understand that option. Please select a valid option.');
+          }
+        }
+      }
+
+      _controller.clear(); // Clear the input field
     });
-
-    // Simulate chatbot response
-    final chatbotResponse = getChatbotResponse(text);
-    _addBotMessage(chatbotResponse);
-  }
-
-  void _addBotMessage(String text) {
-    setState(() {
-      _messages.add(Message(text: text, isUser: false));
-    });
-  }
-
-  String getChatbotResponse(String userMessage) {
-    // Handle different user queries and provide responses here
-    userMessage = userMessage.toLowerCase();
-
-    if (userMessage.contains('hello')) {
-      return 'Hi there! Welcome to our shopping mall app.';
-    } else if (userMessage.contains('how can I shop')) {
-      return 'You can start shopping by browsing our wide range of products and adding them to your cart. When you are ready, proceed to checkout.';
-    } else if (userMessage.contains('what are the current offers')) {
-      return 'We have exciting offers on fashion, electronics, and more. Check out our "Offers" section to see the latest deals.';
-    } else if (userMessage.contains('how to contact customer support')) {
-      return 'You can reach our customer support team by tapping on the "Contact Us" option in the app menu.';
-    } else if (userMessage.contains('store locations')) {
-      return 'We have multiple store locations in the city. You can find the nearest store using the "Store Locator" feature in the app.';
-    } else {
-      return "I'm sorry, I don't have information on that specific topic. Please feel free to ask any other questions.";
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Shopping Mall Support'),
+      ),
       body: Column(
-        children: <Widget>[
+        children: [
           Expanded(
             child: ListView.builder(
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final message = _messages[index];
-                return ChatMessage(
-                  text: message.text,
-                  isUser: message.isUser,
-                );
+              itemCount: messages.length,
+              itemBuilder: (BuildContext context, int index) {
+                if (messages[index].startsWith('App: Choose from the following options:')) {
+                  // Create buttons for options
+                  final optionList = messages[index].split('\n').sublist(1);
+                  return ButtonOptions(options: optionList, onPressed: handleUserInput);
+                } else {
+                  return ChatBubble(
+                    text: messages[index],
+                    isUserMessage: messages[index].startsWith('User: '),
+                  );
+                }
               },
             ),
           ),
-          Divider(height: 1.0),
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
+          TextField(
+            onSubmitted: (String text) {
+              handleUserInput(text); // Handle user input here
+            },
+            decoration: InputDecoration(
+              hintText: 'Enter your question...',
+              suffixIcon: IconButton(
+                icon: Icon(Icons.send),
+                onPressed: () {
+                  handleUserInput("User: " + _controller.text); // Handle user input here
+                },
+              ),
             ),
-            child: _buildTextComposer(),
+            controller: _controller,
           ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildTextComposer() {
-    return IconTheme(
-      data: IconThemeData(color: Theme.of(context).colorScheme.secondary),
+class ChatBubble extends StatelessWidget {
+  final String text;
+  final bool isUserMessage;
+
+  ChatBubble({required this.text, required this.isUserMessage});
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: isUserMessage ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
-          children: <Widget>[
-            Flexible(
-              child: TextField(
-                controller: _textController,
-                onSubmitted: _handleSubmitted,
-                decoration: InputDecoration.collapsed(
-                  hintText: 'Ask a question',
-                ),
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.send),
-              onPressed: () => _handleSubmitted(_textController.text),
-            ),
-          ],
+        margin: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(12.0),
+        decoration: BoxDecoration(
+          color: isUserMessage ? Colors.blue : Colors.green, // Customize the colors
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(color: Colors.white, fontSize: 16.0),
         ),
       ),
     );
   }
 }
 
-class Message {
-  final String text;
-  final bool isUser;
+class ButtonOptions extends StatelessWidget {
+  final List<String> options;
+  final Function onPressed;
 
-  Message({required this.text, required this.isUser});
-}
-
-class ChatMessage extends StatelessWidget {
-  final String text;
-  final bool isUser;
-
-  ChatMessage({required this.text, required this.isUser});
+  ButtonOptions({required this.options, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-      child: Row(
-        mainAxisAlignment:
-        isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          if (!isUser)
-            CircleAvatar(
-              child: Text('Bot'),
-            ),
-          Flexible(
-            child: Container(
-              padding: EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                color:
-                isUser ? Theme.of(context).colorScheme.secondary : Colors.blueGrey,
-                borderRadius: isUser
-                    ? BorderRadius.only(
-                  topLeft: Radius.circular(8.0),
-                  topRight: Radius.circular(8.0),
-                  bottomLeft: Radius.circular(8.0),
-                )
-                    : BorderRadius.only(
-                  topLeft: Radius.circular(8.0),
-                  topRight: Radius.circular(8.0),
-                  bottomRight: Radius.circular(8.0),
-                ),
-              ),
-              child: Text(
-                text,
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return Column(
+      children: options.map((option) {
+        return ElevatedButton(
+          onPressed: () {
+            onPressed(option);
+          },
+          child: Text(option),
+        );
+      }).toList(),
     );
   }
 }
